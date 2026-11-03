@@ -1,14 +1,17 @@
 import { pageHead } from "@/lib/seo";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, Phone } from "lucide-react";
+import { EMAIL, PHONE, PHONE_HREF, PHONE_LABEL } from "@/lib/contact";
+import { Checklist, TransparencyNote } from "@/components/site/blocks";
+import { BEFORE_CONTACT } from "@/lib/guides";
 import { PageHero } from "@/components/site/page-shell";
 import { Reveal, Eyebrow } from "@/components/site/primitives";
 import { IMG } from "@/lib/images";
 
-const title = "Contact Core Internet | Service Assistance";
+const title = "Contact Core Internet | Independent General Assistance";
 const description =
-  "Contact Core Internet for general guidance about internet, broadband, Wi-Fi and cable TV.";
+  "Contact Core Internet for independent general-information assistance on internet, Wi-Fi, TV, mobile and business connectivity. Not an official provider contact.";
 
 export const Route = createFileRoute("/contact")({
   head: () =>
@@ -26,16 +29,24 @@ function ContactPage() {
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const body = [
+      `Name: ${f.get("name")}`,
+      `Email: ${f.get("email")}`,
+      `City or ZIP: ${f.get("zip") || "-"}`,
+      "",
+      `${f.get("message") || ""}`,
+    ].join("\n");
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent("General assistance request")}&body=${encodeURIComponent(body)}`;
     setSent(true);
-    e.currentTarget.reset();
   }
 
   return (
     <>
       <PageHero
         eyebrow="Contact"
-        title="Talk to an advisor"
-        intro="Tell us what you would like help with and an advisor will get back to you with general guidance. We are not an ISP and are not affiliated with any provider."
+        title="Get General Assistance"
+        intro="Ask a general question about internet, Wi-Fi, TV, mobile or business connectivity. Core Internet is an independent information resource and is not affiliated with any provider."
         image={IMG.installer}
       />
 
@@ -46,11 +57,11 @@ function ContactPage() {
             <p className="text-sm font-semibold">Legal business name: Core Internet</p>
             <ul className="space-y-4">
               {[
-                { icon: Phone, label: "(833) 878-1664", href: "tel:+18338781664" },
+                { icon: Phone, label: PHONE, href: PHONE_HREF },
                 {
                   icon: Mail,
-                  label: "hello@coreinternet.online",
-                  href: "mailto:hello@coreinternet.online",
+                  label: EMAIL,
+                  href: `mailto:${EMAIL}`,
                 },
               ].map((c) => (
                 <li
@@ -66,18 +77,15 @@ function ContactPage() {
                   </a>
                 </li>
               ))}
-              <li className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5">
-                <MapPin className="mt-0.5 size-5 shrink-0 text-primary" />
-                <span className="text-sm">1200 Fiber Lane, Suite 480, Austin, TX 78701</span>
-              </li>
             </ul>
+            <p className="text-sm font-semibold text-foreground">{PHONE_LABEL}</p>
+            <TransparencyNote />
           </Reveal>
 
           <Reveal delay={100} className="rounded-3xl border border-border bg-card p-7 sm:p-10">
-            <h2 className="text-2xl font-extrabold">Request guidance</h2>
+            <h2 className="text-2xl font-extrabold">Send a general question</h2>
             <p className="mt-2 text-xs text-muted-foreground">
-              Core Internet is a service assistance provider. We do not
-              sell internet or cable services.
+              Core Internet is an independent information resource. Submitting opens your email app with your message ready to send; nothing is sent until you send it. Do not include passwords or one-time codes.
             </p>
             <form onSubmit={onSubmit} className="mt-6 grid gap-4">
               {[
@@ -115,11 +123,23 @@ function ContactPage() {
               </button>
               {sent && (
                 <p className="rounded-xl border border-accent/35 bg-accent/10 p-4 text-sm">
-                  Thank you. An advisor will contact you with general guidance.
+                  Your email app should have opened with your message. Please send it from there. If nothing opened, email us at the address shown.
                 </p>
               )}
             </form>
           </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-secondary/60 py-16">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <h2 className="font-display text-2xl font-extrabold sm:text-3xl">
+            Before You Contact Customer Support
+          </h2>
+          <p className="mt-2 mb-6 text-sm text-muted-foreground">
+            Have these ready for any support conversation.
+          </p>
+          <Checklist items={BEFORE_CONTACT} label="Before you contact customer support" />
         </div>
       </section>
     </>

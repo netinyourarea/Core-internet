@@ -1,15 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { Mail, MapPin, Phone, ArrowUpRight } from "lucide-react";
+import { Mail, Phone, ArrowUpRight } from "lucide-react";
 import { Logo } from "./header";
 import { NetworkPattern } from "./primitives";
+import { EMAIL, PHONE, PHONE_HREF, PHONE_LABEL, TRANSPARENCY_STATEMENT } from "@/lib/contact";
 
 const COLUMNS: { title: string; links: { label: string; to: string }[] }[] = [
   {
-    title: "Services",
+    title: "Support",
     links: [
       { label: "Home", to: "/" },
-      { label: "Internet", to: "/internet" },
-      { label: "Cable TV", to: "/cable-tv" },
+      { label: "Internet Help", to: "/internet" },
+      { label: "TV & Mobile", to: "/tv-mobile" },
+      { label: "Business", to: "/business" },
       { label: "Contact", to: "/contact" },
     ],
   },
@@ -28,7 +30,7 @@ const COLUMNS: { title: string; links: { label: string; to: string }[] }[] = [
 export const BUSINESS_NAME = "Core Internet";
 
 export const INDEPENDENT_STATEMENT =
-  "Core Internet is an independent third-party service assistance provider. We are not affiliated with, authorized by, or endorsed by any internet, cable, or telecom service provider.";
+  "Core Internet is an independent information and assistance resource. It is not an internet provider and is not affiliated with any telecommunications provider.";
 
 export const DISCLAIMER_TEXT =
   "Core Internet is an independent third-party service assistance provider. We are not affiliated with, authorized by, or endorsed by any internet, broadband, or cable TV service provider. Brand names, if mentioned, are used strictly for informational purposes only.";
@@ -49,17 +51,18 @@ export function Footer() {
               <ul className="mt-3 space-y-3 text-sm text-cream/75">
                 <li className="flex items-start gap-3">
                   <Phone className="mt-0.5 size-4 shrink-0 text-aqua" />
-                  <a href="tel:+18338781664" className="hover:text-aqua">(833) 878-1664</a>
+                  <span>
+                    <a href={PHONE_HREF} className="hover:text-aqua">
+                      {PHONE}
+                    </a>
+                    <span className="mt-0.5 block text-xs text-cream/70">{PHONE_LABEL}</span>
+                  </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Mail className="mt-0.5 size-4 shrink-0 text-aqua" />
-                  <a href="mailto:hello@coreinternet.online" className="hover:text-aqua">
-                    hello@coreinternet.online
+                  <a href={`mailto:${EMAIL}`} className="hover:text-aqua">
+                    {EMAIL}
                   </a>
-                </li>
-                <li className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 size-4 shrink-0 text-aqua" />
-                  <span>1200 Fiber Lane, Suite 480, Austin, TX 78701</span>
                 </li>
               </ul>
             </div>
@@ -87,13 +90,13 @@ export function Footer() {
           </div>
 
           <div className="mt-14 rounded-3xl bg-cream/6 p-6 ring-1 ring-cream/12">
-            <h4 className="text-sm font-bold text-coral">Independent Service Disclaimer</h4>
-            <p className="mt-2 text-xs leading-relaxed text-cream/60">{DISCLAIMER_TEXT}</p>
+            <h4 className="text-sm font-bold text-coral">Independent Service Disclosure</h4>
+            <p className="mt-2 text-sm leading-relaxed text-cream/80">{TRANSPARENCY_STATEMENT}</p>
           </div>
 
           <div className="mt-8 flex flex-col gap-3 border-t border-cream/10 pt-6 text-xs text-cream/50 sm:flex-row sm:items-center sm:justify-between">
             <p>© {new Date().getFullYear()} Core Internet. All rights reserved.</p>
-            <p>Independent third-party service assistance provider. Not an ISP.</p>
+            <p>Independent information resource. Not an ISP.</p>
           </div>
         </div>
       </div>

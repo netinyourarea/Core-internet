@@ -1,4 +1,4 @@
-import { PHONE_HREF } from "@/lib/contact";
+import { PHONE, PHONE_HREF } from "@/lib/contact";
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { Eyebrow, Reveal, NetworkPattern } from "./primitives";
@@ -71,20 +71,20 @@ export function CtaStrip() {
         <Reveal className="tide-bg relative isolate flex flex-col items-center gap-6 overflow-hidden shape-b p-10 text-center text-cream sm:p-14">
           <NetworkPattern className="text-aqua/30" />
           <h2 className="relative font-display text-3xl font-extrabold sm:text-4xl">
-            Questions about internet or cable TV?
+            Questions about internet, TV or mobile connectivity?
           </h2>
           <div className="relative flex flex-col gap-3 sm:flex-row">
             <Link
               to="/internet"
               className="rounded-full bg-white px-8 py-3.5 text-sm font-bold text-primary transition-colors hover:bg-aqua"
             >
-              Internet guidance
+              Troubleshooting checks
             </Link>
             <a
               href={PHONE_HREF}
               className="rounded-full px-8 py-3.5 text-sm font-bold text-cream ring-1 ring-cream/25 transition-colors hover:bg-cream/10"
             >
-              Talk to an Advisor
+              Get General Assistance: {PHONE}
             </a>
           </div>
         </Reveal>

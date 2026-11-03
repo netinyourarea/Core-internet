@@ -1,31 +1,41 @@
-import { PHONE_HREF } from "@/lib/contact";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
 import {
+  AlertTriangle,
   ArrowUpRight,
-  Ban,
-  BookOpen,
-  Boxes,
-  Check,
-  Clapperboard,
+  Briefcase,
+  Cable,
+  ClipboardList,
   Compass,
-  Headphones,
+  Gauge,
   LifeBuoy,
-  Minus,
   MonitorPlay,
   Phone,
-  Plus,
+  Radio,
   Router as RouterIcon,
   ShieldCheck,
+  Signal,
+  Smartphone,
   Sparkles,
-  Trophy,
   Tv,
   Wifi,
-  Workflow,
+  WifiOff,
 } from "lucide-react";
-import { Eyebrow, NetworkPattern, Reveal } from "./primitives";
+import { PHONE, PHONE_HREF } from "@/lib/contact";
+import { FAQS } from "@/lib/faqs";
+import { BEFORE_CONTACT } from "@/lib/guides";
 import { IMG } from "@/lib/images";
 import { cn } from "@/lib/utils";
+import { Eyebrow, NetworkPattern, Reveal } from "./primitives";
+import {
+  AssistStrip,
+  CallLabel,
+  Checklist,
+  FaqList,
+  GuideLink,
+  SectionHead,
+  TopicLinkCard,
+  type TopicCard,
+} from "./blocks";
 
 /* ---------------------------------------------------------------- HERO */
 
@@ -42,44 +52,47 @@ export function Hero() {
             <Reveal>
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-medium text-white/85 ring-1 ring-white/20">
                 <ShieldCheck className="size-4 text-aqua" />
-                Internet & cable service assistance
+                Independent internet, TV &amp; mobile connectivity help
               </span>
             </Reveal>
 
             <Reveal delay={80}>
               <h1 className="mt-7 max-w-2xl font-display text-4xl leading-[1.05] font-extrabold sm:text-5xl lg:text-6xl">
-                Reliable <span className="aqua-text">Internet &amp; Cable</span> Service
-                Assistance
+                Reliable <span className="aqua-text">Internet &amp; Connectivity</span> Assistance
               </h1>
             </Reveal>
 
             <Reveal delay={160}>
-              <p className="mt-6 max-w-lg text-base leading-relaxed text-white/75 sm:text-lg">
-                Get general guidance and informational support related to internet, broadband,
-                Wi-Fi, and cable TV services.
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+                Clear answers for internet, television and connection problems. Explore practical
+                troubleshooting guidance, understand service interruptions and find helpful
+                information for your internet, TV, mobile and business connectivity questions.
               </p>
             </Reveal>
 
             <Reveal delay={220} className="mt-9">
               <div className="flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={PHONE_HREF}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-primary transition-colors hover:bg-aqua"
+                <Link
+                  to="/internet"
+                  className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-primary transition-colors hover:bg-aqua"
                 >
-                  Talk to an Internet Advisor
+                  Explore Support
                   <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </a>
+                </Link>
                 <a
                   href={PHONE_HREF}
-                  className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold text-white ring-1 ring-white/30 transition-colors hover:bg-white/10"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold text-white ring-1 ring-white/30 transition-colors hover:bg-white/10"
                 >
                   <Phone className="size-4" />
-                  Call for Service Guidance
+                  Get General Assistance: {PHONE}
                 </a>
               </div>
-              <p className="mt-4 text-xs font-medium text-white/70">
-                Not an ISP. No brand affiliation.
-              </p>
+              <div className="mt-4">
+                <CallLabel tone="light" />
+                <p className="mt-1 text-xs font-medium text-white/80">
+                  Independent resource. Not an official provider.
+                </p>
+              </div>
             </Reveal>
           </div>
 
@@ -88,7 +101,7 @@ export function Hero() {
               <div className="group relative col-span-3 row-span-2 h-[22rem] overflow-hidden rounded-[3rem_0.75rem_3rem_0.75rem] ring-1 ring-white/20 sm:h-[30rem]">
                 <img
                   src={IMG.smartHome}
-                  alt="Connected smart home living space"
+                  alt="Connected smart home living space with Wi-Fi devices"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <span className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
@@ -130,18 +143,19 @@ export function Hero() {
 /* -------------------------------------------------------------- TICKER */
 
 const TICKER = [
-  "Expert guidance",
-  "Internet & broadband help",
-  "Wi-Fi setup guidance",
-  "Cable TV information",
-  "Not an ISP",
-  "No brand affiliation",
-  "Plain-language answers",
+  "Internet troubleshooting",
+  "Wi-Fi support",
+  "Router & modem help",
+  "Outage information",
+  "Cable TV support",
+  "Mobile connectivity",
+  "Business internet support",
+  "Independent resource",
 ];
 
 export function Ticker() {
   return (
-    <section className="overflow-hidden py-10">
+    <section className="overflow-hidden py-10" aria-hidden="true">
       <div className="marquee-track flex w-max gap-10 pr-10">
         {[0, 1].map((dup) => (
           <div key={dup} className="flex shrink-0 items-center gap-10">
@@ -161,23 +175,116 @@ export function Ticker() {
   );
 }
 
+/* ------------------------------------------------------- SUPPORT TOPICS */
+
+const SUPPORT_TOPICS: TopicCard[] = [
+  {
+    icon: WifiOff,
+    title: "Internet Connection Problems",
+    copy: "Work out whether one device or the whole home is offline and which checks to try first.",
+    to: "/internet",
+    hash: "connection-help",
+  },
+  {
+    icon: Gauge,
+    title: "Slow Internet and Wi-Fi Issues",
+    copy: "Why distance, walls, interference and busy networks slow things down, and what to test.",
+    to: "/internet",
+    hash: "wifi",
+  },
+  {
+    icon: Tv,
+    title: "Television and Cable Problems",
+    copy: "Blank screens, missing channels, pixelation, remote and sound problems.",
+    to: "/tv-mobile",
+    hash: "cable-tv",
+  },
+  {
+    icon: AlertTriangle,
+    title: "Service Outages",
+    copy: "What an outage means, how to tell it from a home problem and where to check updates.",
+    to: "/internet",
+    hash: "outages",
+  },
+  {
+    icon: RouterIcon,
+    title: "Router and Modem Setup",
+    copy: "The difference between a modem and a router, placement, power and basic setup checks.",
+    to: "/internet",
+    hash: "router-modem",
+  },
+  {
+    icon: Briefcase,
+    title: "Business Connectivity",
+    copy: "Office Wi-Fi, voice problems and what to prepare when several people are affected.",
+    to: "/business",
+  },
+];
+
+export function SupportTopics() {
+  return (
+    <section className="py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid items-start gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+          <Reveal className="lg:sticky lg:top-28">
+            <div className="shape-a relative overflow-hidden">
+              <img
+                src={IMG.supportTeam}
+                alt="Team members discussing connectivity questions"
+                loading="lazy"
+                className="h-[22rem] w-full object-cover"
+              />
+            </div>
+            <div className="mt-8">
+              <Eyebrow>Support topics</Eyebrow>
+              <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
+                Help With Internet and Connectivity Questions
+              </h2>
+              <p className="mt-4 text-muted-foreground">
+                Pick the topic closest to your problem. Each guide explains common causes and
+                practical checks, and says when to contact your verified provider.
+              </p>
+            </div>
+          </Reveal>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {SUPPORT_TOPICS.map((t, i) => (
+              <Reveal key={t.title} delay={(i % 2) * 80} className={cn(i % 2 && "sm:mt-8")}>
+                <TopicLinkCard t={t} />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ------------------------------------------------------- INTERNET HELP */
 
-const INTERNET_HELP = [
+const INTERNET_HELP: (Omit<TopicCard, "copy"> & { body: string })[] = [
   {
     icon: Compass,
-    title: "Understand your service options",
-    copy: "Plain-language explanations of broadband, fiber, cable and wireless internet, so you know what the terms on a provider's website actually mean.",
+    title: "Understand Your Connection",
+    body: "How internet connections work, what a modem and a router each do, and how to spot common connection problems.",
+    to: "/internet",
+    hash: "router-modem",
+    cta: "How it works",
   },
   {
     icon: LifeBuoy,
-    title: "Common connectivity issues",
-    copy: "General, practical guidance for slow speeds, dropped connections and Wi-Fi dead spots, including the checks you can try yourself.",
+    title: "Troubleshoot Common Issues",
+    body: "Simple steps for slow speeds, disconnected devices, weak Wi-Fi and unstable connections.",
+    to: "/internet",
+    hash: "connection-help",
+    cta: "Start the checks",
   },
   {
-    icon: Workflow,
-    title: "Navigating provider processes",
-    copy: "Help understanding how provider sign-up, installation visits and account changes typically work, so you know what to ask and expect.",
+    icon: Signal,
+    title: "Find the Right Support",
+    body: "How to tell whether an issue is device-related, equipment-related or possibly a wider service interruption.",
+    to: "/internet",
+    hash: "outages",
+    cta: "Find the cause",
   },
 ];
 
@@ -185,17 +292,11 @@ export function InternetHelp() {
   return (
     <section className="py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="max-w-2xl">
-          <Eyebrow>Internet &amp; broadband</Eyebrow>
-          <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-            Clear guidance for your internet questions
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            We are an assistance provider, not an internet provider. Our advisors offer
-            general information so you can make your own decisions with confidence.
-          </p>
-        </Reveal>
-
+        <SectionHead
+          eyebrow="Internet guidance"
+          title="Clear Guidance for Your Internet Questions"
+          intro="Core Internet is an independent assistance resource, not an internet provider. These guides explain the basics so you can make your own decisions with confidence."
+        />
         <div className="mt-12 grid gap-5 lg:grid-cols-3">
           {INTERNET_HELP.map((t, i) => (
             <Reveal
@@ -220,23 +321,24 @@ export function InternetHelp() {
                 <p
                   className={cn(
                     "mt-3 text-sm leading-relaxed",
-                    i === 1 ? "text-white/75" : "text-muted-foreground",
+                    i === 1 ? "text-white/80" : "text-muted-foreground",
                   )}
                 >
-                  {t.copy}
+                  {t.body}
                 </p>
-                <a
-                  href={PHONE_HREF}
+                <GuideLink
+                  to={t.to}
+                  hash={t.hash}
                   className={cn(
-                    "mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-colors",
+                    "mt-8 inline-flex min-h-11 items-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-colors",
                     i === 1
                       ? "bg-white text-primary hover:bg-aqua"
                       : "bg-ink text-cream hover:bg-primary",
                   )}
                 >
-                  Talk to an advisor
+                  {t.cta}
                   <ArrowUpRight className="size-4" />
-                </a>
+                </GuideLink>
               </div>
             </Reveal>
           ))}
@@ -246,32 +348,92 @@ export function InternetHelp() {
   );
 }
 
+/* --------------------------------------------------------------- STEPS */
+
+const STEPS = [
+  {
+    icon: ClipboardList,
+    title: "Describe the Problem",
+    copy: "Identify what is happening, when it started and which devices or services are affected.",
+  },
+  {
+    icon: Cable,
+    title: "Check the Basics",
+    copy: "Review power, cables, Wi-Fi settings, device connections and equipment status lights.",
+  },
+  {
+    icon: Compass,
+    title: "Understand the Cause",
+    copy: "Decide whether the problem may involve a single device, home equipment or a wider service interruption.",
+  },
+  {
+    icon: ArrowUpRight,
+    title: "Find the Next Step",
+    copy: "Use the relevant guidance, or contact the verified service provider when account-level or network-level help is needed.",
+  },
+];
+
+export function Steps() {
+  return (
+    <section className="py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <SectionHead eyebrow="How it works" title="Four Simple Steps to Clearer Answers" />
+        <ol className="relative mt-14 grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <span
+            aria-hidden
+            className="absolute top-7 right-[12.5%] left-[12.5%] hidden h-0.5 bg-gradient-to-r from-primary/10 via-primary/50 to-primary/10 lg:block"
+          />
+          {STEPS.map((s, i) => (
+            <Reveal as="li" key={s.title} delay={i * 100} className="relative">
+              <span className="relative z-10 grid size-14 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[var(--shadow-lift)]">
+                <s.icon className="size-5" />
+                <span className="absolute -top-2 -right-2 grid size-6 place-items-center rounded-full bg-ink text-[11px] font-extrabold text-white">
+                  {i + 1}
+                </span>
+              </span>
+              <h3 className="mt-5 font-display text-lg font-bold">
+                <span className="sr-only">Step {i + 1}: </span>
+                {s.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.copy}</p>
+            </Reveal>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
 /* ------------------------------------------------------------- TV HELP */
 
-const TV_TOPICS = [
+export const TV_TOPICS = [
   {
-    name: "Channel line-ups",
-    copy: "General information on how channel line-ups and add-on packs are usually organised.",
-    img: IMG.familyTv,
+    id: "blank-screen",
+    name: "Blank screen",
+    copy: "Confirm the correct HDMI input and check that the receiver is powered on.",
+    img: IMG.livingRoomTv,
     icon: Tv,
   },
   {
-    name: "Sports & live events",
-    copy: "Understand what to look for when you want sports and live event coverage.",
-    img: IMG.sportsTv,
-    icon: Trophy,
+    id: "missing-channels",
+    name: "Missing channels",
+    copy: "Verify the channel number, subscription package and any service notices through the provider's official account tools.",
+    img: IMG.familyTv,
+    icon: Radio,
   },
   {
-    name: "Movies & entertainment",
-    copy: "General guidance on movie channels, on-demand features and streaming apps on your TV.",
+    id: "pixelation-freezing",
+    name: "Pixelation or freezing",
+    copy: "Inspect cable connections and restart the receiver only as instructed by the equipment manufacturer.",
     img: IMG.cinema,
-    icon: Clapperboard,
+    icon: MonitorPlay,
   },
   {
-    name: "Kids & family",
-    copy: "Learn about family-friendly content options and parental controls on TV services.",
-    img: IMG.streaming,
-    icon: MonitorPlay,
+    id: "remote-problems",
+    name: "Remote problems",
+    copy: "Replace the batteries, remove obstructions and follow the device pairing instructions.",
+    img: IMG.remoteControl,
+    icon: Smartphone,
   },
 ];
 
@@ -283,18 +445,19 @@ export function TvHelp() {
           <div className="max-w-xl">
             <Eyebrow>Cable TV</Eyebrow>
             <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-              Informational support for cable TV
+              Informational Support for Cable TV
             </h2>
             <p className="mt-4 text-muted-foreground">
-              We do not sell or provide TV service. We offer general information to help you
-              understand your options and questions.
+              Core Internet does not sell or provide TV service. These pointers cover common
+              picture, channel, sound and remote problems.
             </p>
           </div>
           <Link
-            to="/cable-tv"
-            className="group inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-3 text-sm font-bold transition-colors hover:bg-ink hover:text-cream"
+            to="/tv-mobile"
+            hash="cable-tv"
+            className="group inline-flex min-h-11 items-center gap-2 rounded-full bg-secondary px-6 py-3 text-sm font-bold transition-colors hover:bg-ink hover:text-cream"
           >
-            Learn more
+            All TV guidance
             <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </Reveal>
@@ -309,196 +472,22 @@ export function TvHelp() {
                 i % 2 ? "lg:mt-8" : "",
               )}
             >
-              <img
-                src={p.img}
-                alt={p.name}
-                loading="lazy"
-                className="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <span className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 text-cream">
-                <span className="grid size-10 place-items-center rounded-xl bg-white/12 text-aqua backdrop-blur">
-                  <p.icon className="size-5" />
-                </span>
-                <h3 className="mt-4 font-display text-xl font-bold">{p.name}</h3>
-                <p className="mt-2 text-sm text-white/75">{p.copy}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------ WHAT WE DO */
-
-const WHAT_WE_DO = [
-  {
-    icon: Compass,
-    title: "Understand service options",
-    copy: "We help you understand internet and broadband service options in plain language.",
-  },
-  {
-    icon: LifeBuoy,
-    title: "Practical connectivity guidance",
-    copy: "Get practical guidance on common connectivity issues at home or in a small office.",
-  },
-  {
-    icon: Workflow,
-    title: "Navigate provider processes",
-    copy: "Learn how to navigate service provider processes with more confidence.",
-  },
-  {
-    icon: Tv,
-    title: "Cable TV information",
-    copy: "Receive general informational support related to cable TV services.",
-  },
-];
-
-export function WhatWeDo() {
-  return (
-    <section className="relative py-16 lg:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
-          <Reveal className="relative">
-            <div className="shape-a relative overflow-hidden">
-              <img
-                src={IMG.supportTeam}
-                alt="Advisors providing general guidance by phone"
-                loading="lazy"
-                className="h-[30rem] w-full object-cover"
-              />
-            </div>
-            <div className="absolute -right-2 -bottom-8 w-60 rounded-3xl bg-card p-5 shadow-[var(--shadow-lift)] ring-1 ring-border sm:right-8">
-              <p className="flex items-center gap-2 text-xs font-bold tracking-[0.14em] text-primary uppercase">
-                <ShieldCheck className="size-4" /> Our role
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-foreground/80">
-                Guidance and assistance only.
-              </p>
-            </div>
-          </Reveal>
-
-          <div>
-            <Reveal>
-              <Eyebrow>What we do</Eyebrow>
-              <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-                Help with internet and cable questions
-              </h2>
-              <p className="mt-4 text-muted-foreground">
-                At Core Internet, we help users in four practical ways. Our role is limited to
-                guidance and assistance only.
-              </p>
-            </Reveal>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {WHAT_WE_DO.map((r, i) => (
-                <Reveal key={r.title} delay={i * 80} className="soft-card lift p-6">
-                  <span className="grid size-11 place-items-center rounded-2xl bg-primary/10 text-primary">
-                    <r.icon className="size-5" />
+              <GuideLink to="/tv-mobile" hash={p.id} className="block">
+                <img
+                  src={p.img}
+                  alt={`Television scene illustrating ${p.name.toLowerCase()} troubleshooting`}
+                  loading="lazy"
+                  className="h-[26rem] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <span className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 text-cream">
+                  <span className="grid size-10 place-items-center rounded-xl bg-white/12 text-aqua backdrop-blur">
+                    <p.icon className="size-5" />
                   </span>
-                  <h3 className="mt-4 font-bold">{r.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{r.copy}</p>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------------------------------------------------------- WHAT WE DON'T */
-
-const WE_DO_NOT = [
-  "We are not an Internet Service Provider (ISP)",
-  "We do not provide official customer support for any brand",
-  "We are not affiliated, authorized, or endorsed by any telecom or cable company",
-  "We do not sell internet or cable subscriptions",
-  "We do not provide guaranteed technical fixes",
-];
-
-export function WhatWeDoNot() {
-  return (
-    <section className="px-3 sm:px-5">
-      <div className="tide-bg shape-b relative isolate overflow-hidden py-16 text-cream lg:py-24">
-        <NetworkPattern className="text-aqua/30" />
-        <div className="relative mx-auto grid max-w-7xl items-start gap-10 px-6 sm:px-10 lg:grid-cols-[0.9fr_1.1fr]">
-          <Reveal>
-            <Eyebrow tone="light">What we do not do</Eyebrow>
-            <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-              To avoid confusion, please note
-            </h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/70">
-              All mentions of providers, if any, are strictly for informational purposes only.
-            </p>
-          </Reveal>
-          <ul className="grid gap-3">
-            {WE_DO_NOT.map((t, i) => (
-              <Reveal as="li" key={t} delay={i * 70}>
-                <div className="flex items-center gap-4 rounded-2xl bg-white/8 p-4 ring-1 ring-white/15">
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/12 text-aqua">
-                    <Ban className="size-4" />
-                  </span>
-                  <span className="text-sm font-medium">{t}</span>
+                  <h3 className="mt-4 font-display text-xl font-bold">{p.name}</h3>
+                  <p className="mt-2 text-sm text-white/85">{p.copy}</p>
                 </div>
-              </Reveal>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* --------------------------------------------------------------- STEPS */
-
-const STEPS = [
-  {
-    icon: Phone,
-    title: "Tell us what you need",
-    copy: "Share your question about internet, Wi-Fi or cable TV.",
-  },
-  {
-    icon: Headphones,
-    title: "Talk to an advisor",
-    copy: "An advisor listens and asks a few simple questions.",
-  },
-  {
-    icon: BookOpen,
-    title: "Get general guidance",
-    copy: "Receive plain-language information and suggested next steps.",
-  },
-  {
-    icon: Check,
-    title: "You decide",
-    copy: "Any service decisions are made directly with your chosen provider.",
-  },
-];
-
-export function Steps() {
-  return (
-    <section className="py-16 lg:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="max-w-2xl">
-          <Eyebrow>How it works</Eyebrow>
-          <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-            Four simple steps to clearer answers
-          </h2>
-        </Reveal>
-
-        <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((s, i) => (
-            <Reveal key={s.title} delay={i * 100} className={cn("relative", i % 2 && "lg:mt-10")}>
-              <span className="relative grid size-14 place-items-center rounded-2xl bg-primary text-primary-foreground">
-                <s.icon className="size-5" />
-                <span className="absolute -top-2 -right-2 grid size-6 place-items-center rounded-full bg-ink text-[11px] font-extrabold text-white">
-                  {i + 1}
-                </span>
-              </span>
-              <h3 className="mt-5 font-display text-lg font-bold">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.copy}</p>
+              </GuideLink>
             </Reveal>
           ))}
         </div>
@@ -509,24 +498,33 @@ export function Steps() {
 
 /* ----------------------------------------------------------- WI-FI HELP */
 
-const WIFI_TOPICS = [
+const WIFI_TOPICS: (TopicCard & { img: string; alt: string })[] = [
   {
     icon: RouterIcon,
-    title: "Router placement",
-    copy: "General tips on where to place a router to improve coverage around your home.",
+    title: "Router and Modem Setup",
+    copy: "The difference between a modem and a router, plus placement, power connections and basic setup checks.",
     img: IMG.routerDevice,
+    alt: "Wi-Fi router placed on a shelf in a living room",
+    to: "/internet",
+    hash: "router-modem",
   },
   {
-    icon: Boxes,
-    title: "Mesh Wi-Fi basics",
-    copy: "An introduction to mesh systems and when they can help with larger or multi-floor homes.",
+    icon: Wifi,
+    title: "Wi-Fi Performance",
+    copy: "How walls, distance, interference, connected devices and router placement affect wireless performance.",
     img: IMG.smartHome,
+    alt: "Smart home with several connected devices",
+    to: "/internet",
+    hash: "wifi",
   },
   {
     icon: MonitorPlay,
-    title: "Streaming & devices",
-    copy: "Information on getting a steadier experience for streaming, calls and connected devices.",
-    img: IMG.remoteControl,
+    title: "Streaming and Buffering",
+    copy: "Possible reasons for buffering, slow streaming and unstable connections, and what to test.",
+    img: IMG.streaming,
+    alt: "Streaming video on a television screen",
+    to: "/internet",
+    hash: "wifi",
   },
 ];
 
@@ -534,16 +532,11 @@ export function WifiHelp() {
   return (
     <section className="py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <Reveal className="max-w-2xl">
-          <Eyebrow>Wi-Fi</Eyebrow>
-          <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
-            General Wi-Fi guidance for your home
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Informational support only. We do not sell equipment or guarantee specific results.
-          </p>
-        </Reveal>
-
+        <SectionHead
+          eyebrow="Wi-Fi"
+          title="General Wi-Fi Guidance for Your Home"
+          intro="Informational support only. Core Internet does not sell equipment or guarantee specific results."
+        />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {WIFI_TOPICS.map((g, i) => (
             <Reveal
@@ -551,17 +544,189 @@ export function WifiHelp() {
               delay={i * 90}
               className={cn("soft-card lift overflow-hidden", i === 1 && "md:mt-10")}
             >
-              <img src={g.img} alt={g.title} loading="lazy" className="h-52 w-full object-cover" />
-              <div className="p-7">
-                <span className="grid size-11 place-items-center rounded-2xl bg-primary/10 text-primary">
-                  <g.icon className="size-5" />
-                </span>
-                <h3 className="mt-4 font-display text-lg font-bold">{g.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{g.copy}</p>
-              </div>
+              <GuideLink to={g.to} hash={g.hash} className="block">
+                <img src={g.img} alt={g.alt} loading="lazy" className="h-52 w-full object-cover" />
+                <div className="p-7">
+                  <span className="grid size-11 place-items-center rounded-2xl bg-primary/10 text-primary">
+                    <g.icon className="size-5" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-bold">{g.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{g.copy}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-primary">
+                    Read more <ArrowUpRight className="size-4" />
+                  </span>
+                </div>
+              </GuideLink>
             </Reveal>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------- TROUBLESHOOT */
+
+export function TroubleshootTeaser() {
+  return (
+    <section className="px-3 sm:px-5">
+      <div className="tide-bg shape-a relative isolate overflow-hidden py-16 text-cream lg:py-24">
+        <NetworkPattern className="text-aqua/30" />
+        <div className="relative mx-auto max-w-7xl px-6 sm:px-10">
+          <Reveal className="max-w-2xl">
+            <Eyebrow tone="light">Troubleshooting</Eyebrow>
+            <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
+              Internet Not Working? Start With These Checks
+            </h2>
+            <p className="mt-4 text-white/80">
+              The first question is simple: is one device offline, or all of them?
+            </p>
+          </Reveal>
+          <div className="mt-10 grid gap-5 lg:grid-cols-2">
+            <Reveal className="rounded-3xl bg-white/10 p-6 ring-1 ring-white/20 sm:p-8">
+              <p className="text-xs font-bold tracking-[0.16em] text-aqua uppercase">Situation A</p>
+              <h3 className="mt-2 font-display text-xl font-bold">Only one device is offline</h3>
+              <ol className="mt-4 grid gap-2 text-sm text-white/90">
+                {[
+                  "Turn Wi-Fi off and back on",
+                  "Check Airplane Mode",
+                  "Reconnect to the correct Wi-Fi network",
+                  "Restart the affected device",
+                  "Test another device if possible",
+                ].map((t, i) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="font-bold text-aqua">{i + 1}.</span> {t}
+                  </li>
+                ))}
+              </ol>
+            </Reveal>
+            <Reveal delay={100} className="rounded-3xl bg-white p-6 text-ink sm:p-8">
+              <p className="text-xs font-bold tracking-[0.16em] text-primary uppercase">
+                Situation B
+              </p>
+              <h3 className="mt-2 font-display text-xl font-bold">All devices are offline</h3>
+              <ol className="mt-4 grid gap-2 text-sm text-ink/80">
+                {[
+                  "Confirm the modem and router have power",
+                  "Check the status lights",
+                  "Inspect Ethernet and coaxial cables",
+                  "Restart equipment as its instructions say",
+                  "Check the provider's official outage information",
+                ].map((t, i) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="font-bold text-primary">{i + 1}.</span> {t}
+                  </li>
+                ))}
+              </ol>
+            </Reveal>
+          </div>
+          <Reveal className="mt-8">
+            <Link
+              to="/internet"
+              hash="connection-help"
+              className="group inline-flex min-h-12 items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-primary transition-colors hover:bg-aqua"
+            >
+              See the full step-by-step guide
+              <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ----------------------------------------------------- MORE GUIDES BAND */
+
+const MORE: TopicCard[] = [
+  {
+    icon: AlertTriangle,
+    title: "Internet Outages: Understand What's Happening",
+    copy: "What an outage is, how to tell it from a home Wi-Fi problem, and why restoration times cannot be promised.",
+    to: "/internet",
+    hash: "outages",
+  },
+  {
+    icon: Briefcase,
+    title: "Business Internet & Connectivity Assistance",
+    copy: "A preparation checklist and the questions to ask a verified business support team.",
+    to: "/business",
+  },
+  {
+    icon: Smartphone,
+    title: "Mobile Connectivity Help",
+    copy: "Dropped calls, weak signal and mobile data not loading, plus a security reminder.",
+    to: "/tv-mobile",
+    hash: "mobile",
+  },
+  {
+    icon: Gauge,
+    title: "Choosing an Internet Plan? Know What to Check",
+    copy: "What to compare before ordering, and why availability depends on your exact address.",
+    to: "/internet",
+    hash: "plans",
+  },
+];
+
+export function MoreGuides() {
+  return (
+    <section className="py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <SectionHead eyebrow="More guides" title="Outages, Business, Mobile and Plans" />
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
+          {MORE.map((t, i) => (
+            <Reveal key={t.title} delay={(i % 2) * 80}>
+              <GuideLink
+                to={t.to}
+                className="group soft-card lift flex h-full items-start gap-5 p-7"
+              >
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground">
+                  <t.icon className="size-5" />
+                </span>
+                <span>
+                  <span className="block font-display text-lg font-bold">{t.title}</span>
+                  <span className="mt-2 block text-sm leading-relaxed text-muted-foreground">
+                    {t.copy}
+                  </span>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-primary">
+                    Read the guide
+                    <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
+                </span>
+              </GuideLink>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------------------------------------------- BEFORE YOU CONTACT */
+
+export function BeforeContact() {
+  return (
+    <section id="before-you-contact" className="scroll-mt-28 py-16 lg:py-24">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr]">
+        <Reveal>
+          <Eyebrow>Be prepared</Eyebrow>
+          <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl">
+            Before You Contact Customer Support
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            A few notes make any support conversation shorter and clearer. Tick items off as you
+            go.
+          </p>
+          <img
+            src={IMG.dataDesk}
+            alt="Notebook and laptop on a desk, ready for a support call"
+            loading="lazy"
+            className="mt-8 hidden h-64 w-full rounded-[0.75rem_3.5rem_0.75rem_3.5rem] object-cover lg:block"
+          />
+        </Reveal>
+        <Reveal delay={100}>
+          <Checklist items={BEFORE_CONTACT} label="Before you contact customer support" />
+        </Reveal>
       </div>
     </section>
   );
@@ -583,21 +748,22 @@ export function About() {
             />
           </Reveal>
           <Reveal delay={100}>
-            <Eyebrow>About us</Eyebrow>
+            <Eyebrow>About Core Internet</Eyebrow>
             <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl">
               Transparency, clarity and responsible assistance
             </h2>
             <p className="mt-4 leading-relaxed text-muted-foreground">
-              Core Internet is a service assistance provider offering
-              general guidance related to internet, broadband, Wi-Fi, and cable TV services.
+              Core Internet is an independent information and assistance resource offering general
+              guidance on internet, television, mobile and business connectivity.
             </p>
             <p className="mt-4 leading-relaxed text-muted-foreground">
-              We do not provide internet or cable services directly, and we do not represent or
-              partner with any telecom, internet, or cable TV provider.
+              It does not own or operate an internet network, cannot access customer accounts or
+              change plans and billing, and cannot guarantee technician appointments or
+              restoration times.
             </p>
             <Link
               to="/disclaimer"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-bold text-cream transition-colors hover:bg-primary"
+              className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-bold text-cream transition-colors hover:bg-primary"
             >
               Read our disclaimer
               <ArrowUpRight className="size-4" />
@@ -611,103 +777,31 @@ export function About() {
 
 /* ----------------------------------------------------------------- FAQ */
 
-export const FAQS = [
-  {
-    q: "Are you an internet service provider?",
-    a: "No. Core Internet is a service assistance provider. We do not provide internet, cable or phone services directly, and we do not sell subscriptions.",
-  },
-  {
-    q: "Are you affiliated with any internet or cable company?",
-    a: "No. We are not affiliated with, authorized by, or endorsed by any internet, broadband, or cable TV service provider. Brand names, if mentioned, are used strictly for informational purposes only.",
-  },
-  {
-    q: "Is this official customer support for my provider?",
-    a: "No. We do not provide official customer support for any brand. If you need account, billing or technical support from your provider, please contact that provider directly.",
-  },
-  {
-    q: "What kind of help do you offer?",
-    a: "We offer general guidance and informational support: understanding internet and broadband options, common connectivity issues, how provider processes work, and general information about cable TV services.",
-  },
-  {
-    q: "Can you guarantee that my problem will be fixed?",
-    a: "No. We do not provide guaranteed technical fixes. Our advice is general and informational, and results depend on your equipment, location and provider.",
-  },
-  {
-    q: "Do you charge for your guidance?",
-    a: "General guidance and informational support from us is provided without charge. Any fees for internet or cable services are set and billed by the provider you choose.",
-  },
-  {
-    q: "Will you sign me up for a service?",
-    a: "No. We do not sell or sign you up for services. Any decision to subscribe is made directly between you and the provider.",
-  },
-  {
-    q: "How do I contact you?",
-    a: "Use our contact page to reach an advisor by phone or email. Our contact details are also shown in the footer of every page.",
-  },
-  {
-    q: "What happens to the information I share with you?",
-    a: "We use it to respond to your enquiry and provide guidance. We do not sell personal information. See our Privacy Policy for full details.",
-  },
-];
-
 export function Faq() {
-  const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="py-16 lg:py-24">
+    <section id="faq" className="scroll-mt-28 py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr]">
-          <Reveal>
-            <Eyebrow>FAQs</Eyebrow>
-            <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl">
-              Frequently asked questions
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Clear answers about who we are, what we do, and what we do not do.
-            </p>
-            <a
-              href={PHONE_HREF}
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-bold text-cream transition-colors hover:bg-primary"
-            >
-              Ask an advisor
-              <ArrowUpRight className="size-4" />
-            </a>
-          </Reveal>
-
-          <div className="grid gap-3">
-            {FAQS.map((f, i) => {
-              const isOpen = open === i;
-              return (
-                <Reveal key={f.q} delay={i * 40}>
-                  <button
-                    type="button"
-                    onClick={() => setOpen(isOpen ? null : i)}
-                    aria-expanded={isOpen}
-                    className={cn(
-                      "flex w-full items-center justify-between gap-4 rounded-3xl px-6 py-5 text-left transition-colors",
-                      isOpen
-                        ? "bg-ink text-cream"
-                        : "bg-card ring-1 ring-border hover:bg-secondary/60",
-                    )}
-                  >
-                    <span className="font-display text-base font-bold sm:text-lg">{f.q}</span>
-                    <span
-                      className={cn(
-                        "grid size-8 shrink-0 place-items-center rounded-full",
-                        isOpen ? "bg-coral text-ink" : "bg-secondary text-primary",
-                      )}
-                    >
-                      {isOpen ? <Minus className="size-4" /> : <Plus className="size-4" />}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <p className="px-6 pt-4 pb-2 text-sm leading-relaxed text-muted-foreground">
-                      {f.a}
-                    </p>
-                  )}
-                </Reveal>
-              );
-            })}
-          </div>
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <Eyebrow>FAQs</Eyebrow>
+          <h2 className="mt-5 font-display text-3xl font-extrabold sm:text-4xl lg:text-5xl">
+            Frequently asked questions
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Straight answers on troubleshooting, outages, TV, mobile, business and plans, and on who
+            Core Internet is.
+          </p>
+        </Reveal>
+        <div className="mt-12">
+          <FaqList faqs={FAQS} defaultOpen={null} />
+        </div>
+        <div className="mt-10 text-center">
+          <Link
+            to="/contact"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-bold text-cream transition-colors hover:bg-primary"
+          >
+            Contact page
+            <ArrowUpRight className="size-4" />
+          </Link>
         </div>
       </div>
     </section>
@@ -717,34 +811,5 @@ export function Faq() {
 /* ------------------------------------------------------------ FINAL CTA */
 
 export function FinalCta() {
-  return (
-    <section className="px-3 pb-14 sm:px-5">
-      <div className="tide-bg shape-a relative isolate overflow-hidden text-cream">
-        <NetworkPattern className="text-aqua/30" />
-        <div className="relative mx-auto max-w-3xl px-6 py-20 text-center">
-          <Eyebrow tone="light">Get assistance</Eyebrow>
-          <h2 className="mt-6 font-display text-3xl font-extrabold sm:text-5xl">
-            Questions about internet or cable TV?
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-white/75">
-            Talk to an advisor for general guidance and informational support.
-          </p>
-          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-            <a
-              href={PHONE_HREF}
-              className="rounded-full bg-white px-8 py-4 text-sm font-bold text-primary transition-colors hover:bg-aqua"
-            >
-              Talk to an Internet Advisor
-            </a>
-            <a
-              href={PHONE_HREF}
-              className="rounded-full px-8 py-4 text-sm font-bold text-white ring-1 ring-white/30 transition-colors hover:bg-white/10"
-            >
-              Call for Service Guidance
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return <AssistStrip title="Questions about internet, TV or mobile connectivity?" />;
 }

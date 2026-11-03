@@ -54,7 +54,7 @@ function AdvertisementDisclosurePage() {
         <p>
           The wording of our advertisements is intended to match the content of this website. If you
           find any statement that appears unclear or misleading, please tell us at
-          hello@coreinternet.online so we can correct it.
+          <a href="mailto:hello@coreinternet.online" className="font-bold underline">hello@coreinternet.online</a> so we can correct it.
         </p>
         <h2>Third-party advertising platforms</h2>
         <p>
@@ -64,8 +64,7 @@ function AdvertisementDisclosurePage() {
         </p>
         <h2>Contact</h2>
         <p>
-          Core Internet · (833) 878-1664 · hello@coreinternet.online · 1200 Fiber Lane, Suite 480,
-          Austin, TX 78701
+          Core Internet · <a href="tel:+18338781664" className="font-bold underline">(833) 878-1664</a> · <a href="mailto:hello@coreinternet.online" className="font-bold underline">hello@coreinternet.online</a>
         </p>
       </Prose>
     </>

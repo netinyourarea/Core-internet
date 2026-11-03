@@ -1,13 +1,14 @@
 import { PHONE, PHONE_HREF } from "@/lib/contact";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, Phone, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const NAV = [
   { label: "Home", to: "/" },
-  { label: "Internet", to: "/internet" },
-  { label: "Cable TV", to: "/cable-tv" },
+  { label: "Internet Help", to: "/internet" },
+  { label: "TV & Mobile", to: "/tv-mobile" },
+  { label: "Business", to: "/business" },
   { label: "Contact", to: "/contact" },
 ] as const;
 
@@ -101,14 +102,17 @@ export function Header() {
         <div className="flex items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
           <Logo />
 
-          <nav className="hidden items-center gap-1 rounded-full bg-secondary/70 p-1 lg:flex">
+          <nav
+            aria-label="Main"
+            className="hidden items-center gap-0.5 rounded-full bg-secondary/70 p-1 lg:flex"
+          >
             {NAV.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
                 activeOptions={{ exact: n.to === "/" }}
                 activeProps={{ className: "bg-card text-primary shadow-sm" }}
-                className="rounded-full px-5 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+                className="rounded-full px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:bg-card/70 hover:text-foreground"
               >
                 {n.label}
               </Link>
@@ -118,15 +122,9 @@ export function Header() {
           <div className="flex items-center gap-2">
             <a
               href={PHONE_HREF}
-              className="hidden items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-foreground/80 hover:text-primary xl:flex"
-            >
-              <Phone className="size-4 text-primary" /> {PHONE}
-            </a>
-            <a
-              href={PHONE_HREF}
               className="group hidden items-center gap-1.5 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-primary sm:inline-flex"
             >
-              Talk to an Advisor
+              Call {PHONE}
               <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
             <button
@@ -149,6 +147,8 @@ export function Header() {
                   key={n.to}
                   to={n.to}
                   onClick={() => setOpen(false)}
+                  activeOptions={{ exact: n.to === "/" }}
+                  activeProps={{ className: "bg-secondary text-primary" }}
                   className="rounded-2xl px-4 py-3 text-sm font-semibold hover:bg-secondary hover:text-primary"
                 >
                   {n.label}
@@ -159,7 +159,7 @@ export function Header() {
               href={PHONE_HREF}
               className="mt-2 block rounded-full bg-ink px-4 py-3 text-center text-sm font-semibold text-cream"
             >
-              Talk to an Advisor
+              Call {PHONE}
             </a>
           </div>
         )}
