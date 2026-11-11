@@ -64,7 +64,7 @@ function AdvertisementDisclosurePage() {
         </p>
         <h2>Contact</h2>
         <p>
-          Core Internet · <a href="tel:+18338781664" className="font-bold underline">(833) 878-1664</a> · <a href="mailto:hello@coreinternet.online" className="font-bold underline">hello@coreinternet.online</a>
+          Core Internet · <a href="tel:+18338781660" className="font-bold underline">(833) 878-1660</a> · <a href="mailto:hello@coreinternet.online" className="font-bold underline">hello@coreinternet.online</a>
         </p>
       </Prose>
     </>

@@ -1,5 +1,5 @@
-export const PHONE = "(833) 878-1664";
-export const PHONE_HREF = "tel:+18338781664";
+export const PHONE = "(833) 878-1660";
+export const PHONE_HREF = "tel:+18338781660";
 export const EMAIL = "hello@coreinternet.online";
 
 /** Required wording wherever the phone number is shown. */
